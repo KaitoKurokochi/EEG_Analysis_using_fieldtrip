@@ -1,0 +1,4 @@
+/rawdata/*
+!/rawdata/.gitkeep
+/results/*
+!/results/.gitkeep
