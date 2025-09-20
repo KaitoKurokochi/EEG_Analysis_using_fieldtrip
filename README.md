@@ -10,3 +10,6 @@ My EEG analysis code with using fieldtrip -> [link](https://github.com/fieldtrip
 - add main file
 - edit `main.m` to fit my project
 
+# 20250920 
+- edit `main.m` to 
+
