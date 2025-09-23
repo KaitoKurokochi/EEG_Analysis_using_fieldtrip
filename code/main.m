@@ -14,29 +14,8 @@ hdrfile = fullfile(rawdata_path, 'sample.vhdr');
 eegfile = fullfile(rawdata_path, 'sample.eeg');
 
 cfg = [];
-cfg.trialfun     = 'trialfun_affcog';
-cfg.headerfile   = hdrfile;
-cfg.datafile     = eegfile;
-cfg = ft_definetrial(cfg);
+cfg.dataset = hdrfile;
+EEG_raw = ft_preprocessing(cfg);
 
-%% preprocessing and referencing 
-% Baseline-correction options
-cfg.demean          = 'yes';
-cfg.baselinewindow  = [-0.2 0];
 
-% Fitering options
-cfg.lpfilter        = 'yes';
-cfg.lpfreq          = 100;
-
-% Re-referencing options - see explanation above
-cfg.implicitref   = 'LM';
-cfg.reref         = 'yes';
-cfg.refchannel    = {'LM' 'RM'};
-
-data = ft_preprocessing(cfg);
-
-%% save data 
-preprocessed = data;
-save(fullfile(result_path, 'preprocessed.mat'), 'preprocessed', '-v7.3');
-fprintf('Saved: %s\n', fullfile(result_path, 'preprocessed.mat'));
 
