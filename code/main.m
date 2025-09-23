@@ -39,3 +39,4 @@ data = ft_preprocessing(cfg);
 preprocessed = data;
 save(fullfile(result_path, 'preprocessed.mat'), 'preprocessed', '-v7.3');
 fprintf('Saved: %s\n', fullfile(result_path, 'preprocessed.mat'));
+
