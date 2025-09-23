@@ -15,7 +15,12 @@ eegfile = fullfile(rawdata_path, 'sample.eeg');
 
 cfg = [];
 cfg.dataset = hdrfile;
-EEG_raw = ft_preprocessing(cfg);
+EEG = ft_preprocessing(cfg);
 
-
+%% filtering
+cfg = [];
+cfg.bpfilter = 'yes';    
+cfg.bpfreq = [1 30];  
+cfg.bpfilttype  = 'firws';
+EEG_bp = ft_preprocessing(cfg, EEG);
 
