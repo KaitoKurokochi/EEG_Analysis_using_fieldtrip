@@ -35,9 +35,7 @@ cfg.refchannel    = {'LM' 'RM'};
 
 data = ft_preprocessing(cfg);
 
-%% ERP graph -> 各電極の電位の時系列データをグラフで
-cfg = [];
-cfg.viewmode = 'vertical';   
-cfg.channel  = 'all';
-cfg.blocksize = 5;          
-ft_databrowser(cfg, data);
+%% save data 
+preprocessed = data;
+save(fullfile(result_path, 'preprocessed.mat'), 'preprocessed', '-v7.3');
+fprintf('Saved: %s\n', fullfile(result_path, 'preprocessed.mat'));
