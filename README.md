@@ -5,11 +5,20 @@ My EEG analysis code with using fieldtrip -> [link](https://github.com/fieldtrip
 - [link](https://www.fieldtriptoolbox.org/faq/matlab/installation/)
 - make `startup.m` in `MATLAB` directory
 
-# 20250919 tutorial 
-- cite : [](https://www.fieldtriptoolbox.org/tutorial/sensor/preprocessing_erp/)
-- dataset : [](https://download.fieldtriptoolbox.org/tutorial/preprocessing_erp/)
+# 20250923 
+- `main.m`の`prj_root_path`はmac/windowsで合わせる
+- `prj_name`は各プロジェクトに合わせる
 
-read data -> processing -> EEG graph という流れを実装、以下を確認
-- データの読み込み方法について確認
-- プロセッシングのやり方
-- グラフの描写方法
+## projectの構造
+```sh
+C:.
+├─code
+├─rawdata
+│  └─sample
+└─results
+    └─sample
+```
+`rawdata`, `results`にはprojectごとにディレクトリを作成
+
+## Others 
+- `.asv`ファイルの追跡をしない
