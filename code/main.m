@@ -24,3 +24,21 @@ cfg.bpfreq = [1 30];
 cfg.bpfilttype  = 'firws';
 EEG_bp = ft_preprocessing(cfg, EEG);
 
+%% cmp
+% 生データ
+cfg = [];
+cfg.viewmode  = 'vertical';    % 電極ごとに縦に並べる
+cfg.blocksize = 10;            % 10秒単位でスクロール
+ft_databrowser(cfg, EEG);
+
+% 1–30 Hz 後
+cfg = [];
+cfg.viewmode  = 'vertical';
+cfg.blocksize = 10;
+ft_databrowser(cfg, EEG_bp);
+
+%% ICA 
+cfg = []; 
+cfg.method = 'runica';
+EEG_ICA = ft_componentanalysis(cfg, EEG_bp);
+
