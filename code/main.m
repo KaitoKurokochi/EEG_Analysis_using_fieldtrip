@@ -5,15 +5,15 @@ cd(prj_root_path);
 
 prj_name = 'sample'; % adjust to project name
 
-raw_data_path = fullfile(prj_root_path, 'rawdata', prj_name); % rawdata directory
+rawdata_path = fullfile(prj_root_path, 'rawdata', prj_name); % rawdata directory
 result_path = fullfile(prj_root_path, 'results', prj_name); % result
 
 addpath(fullfile(prj_root_path, 'code')); % code directory 
 
 %% read data
 datadir = fullfile(raw_data_path, 'sample_data');
-hdrfile = fullfile(datadir, 's04.vhdr');
-eegfile = fullfile(datadir, 's04.eeg');
+hdrfile = fullfile(rawdata_path, 's04.vhdr');
+eegfile = fullfile(rawdata_path, 's04.eeg');
 
 cfg = [];
 cfg.trialfun     = 'trialfun_affcog';
