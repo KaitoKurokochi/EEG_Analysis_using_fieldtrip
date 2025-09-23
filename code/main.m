@@ -10,8 +10,8 @@ result_path = fullfile(prj_root_path, 'results', prj_name); % result
 addpath(fullfile(prj_root_path, 'code')); % code directory 
 
 %% read data
-hdrfile = fullfile(rawdata_path, 's04.vhdr');
-eegfile = fullfile(rawdata_path, 's04.eeg');
+hdrfile = fullfile(rawdata_path, 'sample.vhdr');
+eegfile = fullfile(rawdata_path, 'sample.eeg');
 
 cfg = [];
 cfg.trialfun     = 'trialfun_affcog';
