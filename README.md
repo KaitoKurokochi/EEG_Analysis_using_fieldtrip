@@ -10,8 +10,7 @@ My EEG analysis code with using fieldtrip -> [link](https://github.com/fieldtrip
 - `main.m`の`prj_root_path`はmac/windowsで合わせる
 - `prj_name`は各プロジェクトに合わせる
 
-
-## projectの構造
+## projectのディレクトリ構造
 ```sh
 C:.
 ├─code
@@ -21,6 +20,7 @@ C:.
     └─sample
 ```
 `rawdata`, `results`にはprojectごとにディレクトリを作成
+
 
 ## Others 
 - `.asv`ファイルの追跡をしない
