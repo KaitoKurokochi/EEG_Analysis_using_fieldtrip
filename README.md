@@ -21,6 +21,12 @@ C:.
 ```
 `rawdata`, `results`にはprojectごとにディレクトリを作成
 
+## Processing 
+0. read data
+1. filtering (1-30Hz)
+2. ICA 
+3. remove noise components 
+4. epoching 
 
 ## Others 
 - `.asv`ファイルの追跡をしない
