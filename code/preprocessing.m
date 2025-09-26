@@ -46,6 +46,29 @@ EEG_epoched = ft_redefinetrial(cfg, EEG_bp);
 EEG_epoched.trialinfo = keys(:);
 disp(EEG_epoched.trialinfo)
 
-%% 6. divide 
+%% 6. divide
+sel = EEG_epoched.trialinfo == "ff";
+cfg = [];
+cfg.trials = find(sel);
+EEG_ff = ft_selectdata(cfg, EEG_epoched);
+
+sel = EEG_epoched.trialinfo == "fc";
+cfg = [];
+cfg.trials = find(sel);
+EEG_fc = ft_selectdata(cfg, EEG_epoched);
+
+sel = EEG_epoched.trialinfo == "cf";
+cfg = [];
+cfg.trials = find(sel);
+EEG_cf = ft_selectdata(cfg, EEG_epoched);
+
+sel = EEG_epoched.trialinfo == "cc";
+cfg = [];
+cfg.trials = find(sel);
+EEG_cc = ft_selectdata(cfg, EEG_epoched);
 
 %% 7. save 
+save(fullfile(rawdata_path, 'EEG_ff.mat'), 'EEG_ff', '-v7.3');
+save(fullfile(rawdata_path, 'EEG_fc.mat'), 'EEG_fc', '-v7.3');
+save(fullfile(rawdata_path, 'EEG_cf.mat'), 'EEG_cf', '-v7.3');
+save(fullfile(rawdata_path, 'EEG_cc.mat'), 'EEG_cc', '-v7.3');
