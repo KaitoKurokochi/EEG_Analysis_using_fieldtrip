@@ -22,3 +22,5 @@ C:.
 3. bp_filter (1-30Hz) 
 4. epoching (-1.5-2.0s around `s4`) 
 5. labeling -> change `s4` signal for each condition 
+6. divide by conditions 
+7. save data 

@@ -45,3 +45,7 @@ EEG_epoched = ft_redefinetrial(cfg, EEG_bp);
 %% 5. labeling 
 EEG_epoched.trialinfo = keys(:);
 disp(EEG_epoched.trialinfo)
+
+%% 6. divide 
+
+%% 7. save 
