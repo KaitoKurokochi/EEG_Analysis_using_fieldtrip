@@ -42,6 +42,8 @@ cfg = [];
 cfg.trl = cfgd.trl;
 EEG_epoched = ft_redefinetrial(cfg, EEG_bp);
 
+save(fullfile(rawdata_path, 'EEG.mat'), 'EEG_epoched', '-v7.3');
+
 %% 5. labeling 
 EEG_epoched.trialinfo = keys(:);
 disp(EEG_epoched.trialinfo)
