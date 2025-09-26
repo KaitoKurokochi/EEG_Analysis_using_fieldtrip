@@ -5,13 +5,7 @@ My EEG analysis code with using fieldtrip -> [link](https://github.com/fieldtrip
 - [link](https://www.fieldtriptoolbox.org/faq/matlab/installation/)
 - make `startup.m` in `MATLAB` directory
 
-
-# 20250923 
-- `main.m`の`prj_root_path`はmac/windowsで合わせる
-- `prj_name`は各プロジェクトに合わせる
-
-
-## projectの構造
+# Directory structure of this project
 ```sh
 C:.
 ├─code
@@ -20,7 +14,11 @@ C:.
 └─results
     └─sample
 ```
-`rawdata`, `results`にはprojectごとにディレクトリを作成
 
-## Others 
-- `.asv`ファイルの追跡をしない
+# 20250926 
+## flow of processing 
+1. read EEG data
+2. read CSV file (`all_sequence.csv`)
+3. bp_filter (1-30Hz) 
+4. epoching (-1.5-2.0s around `s4`) 
+5. labeling -> change `s4` signal for each condition 
