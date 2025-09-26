@@ -9,34 +9,39 @@ rawdata_path = fullfile(prj_root_path, 'rawdata', prj_name); % rawdata directory
 result_path = fullfile(prj_root_path, 'results', prj_name); % result
 addpath(fullfile(prj_root_path, 'code')); % code directory 
 
-%% read data
-hdrfile = fullfile(rawdata_path, 's04.vhdr');
-eegfile = fullfile(rawdata_path, 's04.eeg');
+%% 1. read EEG data
+hdrfile = fullfile(rawdata_path, 'sample.vhdr');
+eegfile = fullfile(rawdata_path, 'sample.eeg');
 
 cfg = [];
-cfg.trialfun     = 'trialfun_affcog';
 cfg.headerfile   = hdrfile;
-cfg.datafile     = eegfile;
-cfg = ft_definetrial(cfg);
+EEG = ft_preprocessing(cfg); 
 
-%% preprocessing and referencing 
-% Baseline-correction options
-cfg.demean          = 'yes';
-cfg.baselinewindow  = [-0.2 0];
+%% 2. read CSV file
+seqfile = fullfile(rawdata_path, 'sequence_all.csv');
+T = readtable(seqfile);
+keys = T.Key; 
 
-% Fitering options
-cfg.lpfilter        = 'yes';
-cfg.lpfreq          = 100;
+%% 3. filtering 
+cfg = [];
+cfg.bpfilter = 'yes';    
+cfg.bpfreq = [1 30];  
+cfg.bpfilttype  = 'firws'; 
+EEG_bp = ft_preprocessing(cfg, EEG);
 
-% Re-referencing options - see explanation above
-cfg.implicitref   = 'LM';
-cfg.reref         = 'yes';
-cfg.refchannel    = {'LM' 'RM'};
+%% 4. segmenting 
+cfgd = [];
+cfgd.dataset = hdrfile;
+cfgd.trialdef.eventtype  = 'Stimulus';
+cfgd.trialdef.eventvalue = 's4';       
+cfgd.trialdef.prestim    = 1.5;          
+cfgd.trialdef.poststim   = 2.0;    
+cfgd = ft_definetrial(cfgd);
 
-data = ft_preprocessing(cfg);
+cfg = [];
+cfg.trl = cfgd.trl;
+EEG_epoched = ft_redefinetrial(cfg, EEG_bp);
 
-%% save data 
-preprocessed = data;
-save(fullfile(result_path, 'preprocessed.mat'), 'preprocessed', '-v7.3');
-fprintf('Saved: %s\n', fullfile(result_path, 'preprocessed.mat'));
-
+%% 5. labeling 
+EEG_epoched.trialinfo = keys(:);
+disp(EEG_epoched.trialinfo)
