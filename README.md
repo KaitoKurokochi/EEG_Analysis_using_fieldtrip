@@ -5,6 +5,13 @@ My EEG analysis code with using fieldtrip -> [link](https://github.com/fieldtrip
 - [link](https://www.fieldtriptoolbox.org/faq/matlab/installation/)
 - make `startup.m` in `MATLAB` directory
 
+# order of execution 
+## 1. data_organization
+各条件、各グループのデータをまとめる
+
+## 2. spectrum_analysis
+各条件、各グループでまとめたデータを周波数解析し、結果を`.m`ファイルに保存
+
 # 20250923 
 - `main.m`の`prj_root_path`はmac/windowsで合わせる
 - `prj_name`は各プロジェクトに合わせる
