@@ -91,3 +91,5 @@ save_path = fullfile(save_dir, save_name);
 save(save_path, 'tfr', '-v7.3');
 
 fprintf('\n✅ Saved TFR to:\n%s\n', save_path);
+
+%% 3 comparison with Z-score
