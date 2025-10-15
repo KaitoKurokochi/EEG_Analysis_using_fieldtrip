@@ -1,7 +1,7 @@
 %% directory settings 
 
-% prj_root_path = '/Users/kurokochikaito/workspace/2025_eeg_analysis/EEG_Analysis_using_fieldtrip'; %project path (for mac)
-prj_root_path = 'C:\Users\kaito\workspace\2025_EEG_Analysis\EEG_Analysis_using_fieldtrip'; %project path (for windows)
+prj_root_path = '/Users/kurokochikaito/workspace/2025_eeg_analysis/EEG_Analysis_using_fieldtrip'; %project path (for mac)
+% prj_root_path = 'C:\Users\kaito\workspace\2025_EEG_Analysis\EEG_Analysis_using_fieldtrip'; %project path (for windows)
 cd(prj_root_path);
 
 prj_name = 'graduation_thesis'; % adjust to project name
@@ -33,52 +33,52 @@ dataExp_Cz = ft_redefinetrial(cfgT, dataExp_Cz);
 dataNov_Cz = ft_redefinetrial(cfgT, dataNov_Cz);
 
 %% 
-cfgF = [];
-cfgF.method      = 'wavelet';      
-cfgF.output      = 'fourier';      
-cfgF.foi         = 2:1:40;         
-cfgF.toi         = -0.5:0.01:1.0;  
-cfgF.width       = 6;              
-cfgF.keeptrials  = 'yes';
-cfgF.channel     = 'Cz';           
+cfg = [];
+cfg.method = 'wavelet';
+cfg.output = 'pow';
+cfg.foi    = 2:1:40;
+cfg.toi    = dataExp_Cz.time{1}(1):0.01:dataExp_Cz.time{1}(end);
+powExp = ft_freqanalysis(cfg, dataExp_Cz);
+powNov = ft_freqanalysis(cfg, dataNov_Cz);         
 
-freqExp = ft_freqanalysis(cfgF, dataExp_Cz);
-freqNov = ft_freqanalysis(cfgF, dataNov_Cz);
+%% 
+cfg = [];
+cfg.method           = 'montecarlo';
+cfg.statistic        = 'indepsamplesT';
+cfg.correctm         = 'cluster';
+cfg.clusteralpha     = 0.05;
+cfg.tail             = 0;
+cfg.clustertail      = 0;
+cfg.numrandomization = 2000;
 
-Fexp = freqExp.fourierspctrm;
-Fnov = freqNov.fourierspctrm; 
+nExp = numel(624); 
+nNov = numel(569);
+cfg.design = [ones(1,nExp), 2*ones(1,nNov)];
+cfg.ivar   = 1;
 
-data1 = squeeze(permute(Fexp, [3 4 1 2])); 
-data2 = squeeze(permute(Fnov, [3 4 1 2]));  
+stat = ft_freqstatistics(cfg, powExp, powNov);
 
-%% PhaseOpposition
-[p_circWW, p_POS, p_zPOS] = PhaseOpposition(data1, data2);
+%% graph 
+% 1) 次元を落として 2D にする（chan 次元を squeeze）
+Tmap = squeeze(stat.stat);      % -> [freq x time] になる想定
+Mmap = squeeze(stat.mask);      % 同様に 2D に
 
-%% axes from FieldTrip result
-t = freqExp.time;          % 1 x T
-f = freqExp.freq;          % 1 x F
+% 2) サイズ整合をチェック
+% rows = length(stat.freq), cols = length(stat.time)
+assert(ismatrix(Tmap), 'Tmap must be 2D');
+assert(size(Tmap,1) == numel(stat.freq) && size(Tmap,2) == numel(stat.time), ...
+    'Size mismatch: got [%d %d], expected [%d %d]', size(Tmap,1), size(Tmap,2), numel(stat.freq), numel(stat.time));
 
-% helper to force [F x T] shape
-fixFT = @(P) ( ...
-    isequal(size(P), [numel(f), numel(t)]) * P + ...
-    isequal(size(P), [numel(t), numel(f)]) * P.' + ...
-    (~isequal(size(P), [numel(f), numel(t)]) & ~isequal(size(P), [numel(t), numel(f)])) * error('Size mismatch: p-matrix not [F x T] or [T x F].') ...
-);
-
-P1 = fixFT(-log10(p_circWW));
-P2 = fixFT(-log10(p_POS));
-P3 = fixFT(-log10(p_zPOS));
-
+% 3) 描画
 figure;
+imagesc(stat.time, stat.freq, Tmap);  % C は [freq x time]
+axis xy; colorbar;
+xlabel('Time (s)'); ylabel('Frequency (Hz)');
+title('T-value map');
+colormap jet;
 
-% --- imagesc 版（推奨・速い） ---
-subplot(1,3,1); imagesc(t, f, P1); axis xy tight; colorbar;
-title('circWW  -log10(p)'); xlabel('Time (s)'); ylabel('Freq (Hz)'); hold on; xline(0,'w--');
-
-subplot(1,3,2); imagesc(t, f, P2); axis xy tight; colorbar;
-title('POS  -log10(p)');   xlabel('Time (s)'); ylabel('Freq (Hz)'); hold on; xline(0,'w--');
-
-subplot(1,3,3); imagesc(t, f, P3); axis xy tight; colorbar;
-title('zPOS -log10(p)');   xlabel('Time (s)'); ylabel('Freq (Hz)'); hold on; xline(0,'w--');
-
-colormap('hot');
+% 4) 有意クラスタを重ねる（mask がある場合）
+if ~isempty(Mmap)
+    hold on;
+    contour(stat.time, stat.freq, Mmap, [1 1], 'w', 'LineWidth', 1.5);
+end
