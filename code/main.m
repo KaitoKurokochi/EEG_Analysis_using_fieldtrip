@@ -68,9 +68,14 @@ cfgp.channel       = 'Cz';
 cfgp.parameter     = 'powspctrm';
 cfgp.xlim          = [-0.5 1.0];
 cfgp.baselinetype  = 'db';
-f = figure; ft_singleplotTFR(cfgp, tfr); colorbar;
+
+f = figure; 
+ft_singleplotTFR(cfgp, tfr); 
+colorbar; 
+set(gca, 'CLim', [0 1.8]);
 title(sprintf('TFR (%s, %s)', strjoin(tfr.label, ','), condition));
-xlabel('Time (s)'); ylabel('Frequency (Hz)');
+xlabel('Time (s)'); 
+ylabel('Frequency (Hz)');
 
 %% save heatmap
 fig_name = sprintf('%s_tfr.png', group);
@@ -91,5 +96,3 @@ save_path = fullfile(save_dir, save_name);
 save(save_path, 'tfr', '-v7.3');
 
 fprintf('\n✅ Saved TFR to:\n%s\n', save_path);
-
-%% 3 comparison with Z-score
