@@ -77,4 +77,22 @@ title(sprintf('TFR (%s, %s)', strjoin(tfr.label, ','), condition));
 xlabel('Time (s)'); 
 ylabel('Frequency (Hz)');
 
+%% save heatmap
+fig_name = sprintf('%s_tfr.png', group);
+fig_dir  = fullfile(result_path, condition);
+if ~exist(fig_dir, 'dir'); mkdir(fig_dir); end
 
+fig_path = fullfile(fig_dir, fig_name);
+
+exportgraphics(f, fig_path, 'Resolution', 300);
+fprintf('\n✅ Saved figure to:\n%s\n', fig_path);
+
+%% save result of FTA
+save_name = sprintf('%s_tfr.mat', group);
+save_dir  = fullfile(result_path, condition);
+if ~exist(save_dir, 'dir'); mkdir(save_dir); end
+
+save_path = fullfile(save_dir, save_name);
+save(save_path, 'tfr', '-v7.3');
+
+fprintf('\n✅ Saved TFR to:\n%s\n', save_path);
